@@ -1,4 +1,5 @@
 export const NAME = "Gunjit Gyawali";
+
 export const ROLE = "Software Developer";
 export const EMAIL = "hello@gunjit.dev";
 export const PHONE = "+977 98-0000-0000";
@@ -147,12 +148,57 @@ export const EDUCATION = [
 ];
 
 export const SERVICES = [
-  { title: "Web Development", desc: "Modern, performant web apps built with React, Next.js and TypeScript." },
-  { title: "UI / UX Design", desc: "Human-centered interfaces with strong visual hierarchy and craft." },
-  { title: "API Development", desc: "Robust REST and GraphQL APIs with observability baked in." },
-  { title: "Mobile Responsive Design", desc: "Fluid layouts that shine on every device, from phone to 4K." },
-  { title: "Consulting", desc: "Architecture reviews, tech due-diligence and team enablement." },
-  { title: "Performance Audits", desc: "Lighthouse-driven optimisation for speed, SEO and accessibility." },
+  { title: "Web Development", desc: "Modern, performant web apps built with React, Next.js and TypeScript.", price: "$1,200", unit: "/ project" },
+  { title: "UI / UX Design", desc: "Human-centered interfaces with strong visual hierarchy and craft.", price: "$800", unit: "/ project" },
+  { title: "API Development", desc: "Robust REST and GraphQL APIs with observability baked in.", price: "$1,000", unit: "/ project" },
+  { title: "Mobile Responsive Design", desc: "Fluid layouts that shine on every device, from phone to 4K.", price: "$600", unit: "/ project" },
+  { title: "Consulting", desc: "Architecture reviews, tech due-diligence and team enablement.", price: "$80", unit: "/ hour" },
+  { title: "Performance Audits", desc: "Lighthouse-driven optimisation for speed, SEO and accessibility.", price: "$450", unit: "/ audit" },
+];
+
+export const HIRE_PACKAGES = [
+  {
+    name: "Starter",
+    price: "$499",
+    duration: "1 week delivery",
+    description: "Perfect for landing pages and small marketing sites.",
+    features: [
+      "1 responsive landing page",
+      "Custom design + animations",
+      "SEO & performance optimized",
+      "2 rounds of revisions",
+      "Email support",
+    ],
+    highlighted: false,
+  },
+  {
+    name: "Professional",
+    price: "$1,499",
+    duration: "2–3 weeks delivery",
+    description: "Full websites and web apps for growing businesses.",
+    features: [
+      "Up to 6 custom pages",
+      "CMS or database integration",
+      "Auth & user accounts",
+      "Advanced animations & UX",
+      "Priority support (2 months)",
+    ],
+    highlighted: true,
+  },
+  {
+    name: "Enterprise",
+    price: "Custom",
+    duration: "Flexible timeline",
+    description: "End-to-end products with backend, mobile, and integrations.",
+    features: [
+      "Full-stack architecture",
+      "Mobile + web platforms",
+      "Third-party integrations",
+      "Dedicated project manager",
+      "Ongoing maintenance",
+    ],
+    highlighted: false,
+  },
 ];
 
 export const TESTIMONIALS = [
@@ -214,6 +260,7 @@ export const NAV = [
   { id: "projects", label: "Projects" },
   { id: "experience", label: "Experience" },
   { id: "services", label: "Services" },
+  { id: "hire", label: "Hire" },
   { id: "testimonials", label: "Testimonials" },
   { id: "blog", label: "Blog" },
   { id: "contact", label: "Contact" },

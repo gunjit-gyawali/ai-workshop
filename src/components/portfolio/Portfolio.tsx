@@ -29,6 +29,9 @@ import {
   ChevronLeft,
   ChevronRight,
   Send,
+  MessageCircle,
+  Check,
+  Bot,
 } from "lucide-react";
 import { toast } from "sonner";
 import profileImg from "@/assets/gunjit-profile.jpg";
@@ -48,6 +51,7 @@ import {
   EXPERIENCE,
   EDUCATION,
   SERVICES,
+  HIRE_PACKAGES,
   TESTIMONIALS,
   POSTS,
   NAV,
@@ -803,19 +807,327 @@ function Services() {
               viewport={{ once: true }}
               transition={{ delay: i * 0.06, duration: 0.5 }}
               whileHover={{ y: -6 }}
-              className="group relative overflow-hidden rounded-2xl glass-strong p-6"
+              className="group relative flex flex-col overflow-hidden rounded-2xl glass-strong p-6"
             >
               <div className="mb-5 grid h-12 w-12 place-items-center rounded-2xl gradient-bg text-primary-foreground transition-transform group-hover:scale-110">
                 <Icon className="h-5 w-5" />
               </div>
               <h3 className="font-display text-lg font-semibold">{s.title}</h3>
               <p className="mt-2 text-sm text-muted-foreground">{s.desc}</p>
+              <div className="mt-5 flex items-end gap-1">
+                <span className="font-display text-2xl font-bold gradient-text">{s.price}</span>
+                <span className="mb-1 text-xs text-muted-foreground">{s.unit}</span>
+              </div>
+              <a
+                href="#hire"
+                className="mt-5 inline-flex items-center justify-center gap-2 rounded-full glass px-4 py-2 text-sm font-medium transition-colors hover:text-primary"
+              >
+                Hire for this <ArrowRight className="h-3.5 w-3.5" />
+              </a>
               <div className="pointer-events-none absolute -right-10 -top-10 h-32 w-32 rounded-full gradient-bg opacity-0 blur-3xl transition-opacity group-hover:opacity-30" />
             </motion.div>
           );
         })}
       </div>
     </Section>
+  );
+}
+
+/* ---------- Hire Me ---------- */
+function HireMe() {
+  const [form, setForm] = useState({ name: "", email: "", pkg: "Professional", budget: "", message: "" });
+  const [sent, setSent] = useState(false);
+
+  const submit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!form.name || !form.email || !form.message) {
+      toast.error("Please fill in your name, email and project details.");
+      return;
+    }
+    setSent(true);
+    toast.success("Request received! I'll get back to you within 24 hours.");
+    setForm({ name: "", email: "", pkg: "Professional", budget: "", message: "" });
+    setTimeout(() => setSent(false), 4000);
+  };
+
+  return (
+    <Section
+      id="hire"
+      eyebrow="Hire Me"
+      title={<>Let's build <span className="gradient-text">something great</span>.</>}
+      subtitle="Pick a package that fits your needs, then send me the brief. I'll reply within 24 hours."
+    >
+      <div className="grid gap-6 lg:grid-cols-3">
+        {HIRE_PACKAGES.map((p, i) => (
+          <motion.div
+            key={p.name}
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: i * 0.08, duration: 0.55 }}
+            whileHover={{ y: -6 }}
+            className={`relative flex flex-col overflow-hidden rounded-3xl p-8 ${
+              p.highlighted
+                ? "glass-strong ring-2 ring-primary/60 shadow-[0_20px_60px_-20px_oklch(0.68_0.22_300/0.5)]"
+                : "glass"
+            }`}
+          >
+            {p.highlighted && (
+              <div className="absolute right-6 top-6 rounded-full gradient-bg px-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-primary-foreground">
+                Most Popular
+              </div>
+            )}
+            <h3 className="font-display text-xl font-semibold">{p.name}</h3>
+            <p className="mt-1 text-xs uppercase tracking-widest text-muted-foreground">{p.duration}</p>
+            <div className="mt-5 flex items-end gap-1">
+              <span className="font-display text-4xl font-bold gradient-text">{p.price}</span>
+            </div>
+            <p className="mt-3 text-sm text-muted-foreground">{p.description}</p>
+            <ul className="mt-6 space-y-2.5 text-sm">
+              {p.features.map((f) => (
+                <li key={f} className="flex items-start gap-2">
+                  <span className="mt-0.5 grid h-4 w-4 shrink-0 place-items-center rounded-full gradient-bg text-primary-foreground">
+                    <Check className="h-2.5 w-2.5" strokeWidth={3} />
+                  </span>
+                  <span>{f}</span>
+                </li>
+              ))}
+            </ul>
+            <button
+              type="button"
+              onClick={() => setForm((f) => ({ ...f, pkg: p.name }))}
+              className={`mt-8 w-full rounded-full px-5 py-3 text-sm font-medium transition-transform hover:scale-[1.02] ${
+                p.highlighted
+                  ? "gradient-bg text-primary-foreground shadow-lg shadow-primary/30"
+                  : "glass hover:text-primary"
+              }`}
+            >
+              Choose {p.name}
+            </button>
+          </motion.div>
+        ))}
+      </div>
+
+      <motion.form
+        onSubmit={submit}
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+        className="mt-12 rounded-3xl glass-strong p-6 sm:p-8"
+      >
+        <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h3 className="font-display text-xl font-semibold">Send a hire request</h3>
+            <p className="text-sm text-muted-foreground">Tell me about your project and I'll respond with a plan.</p>
+          </div>
+          <div className="rounded-full glass px-4 py-2 text-xs">
+            Selected: <span className="font-semibold text-primary">{form.pkg}</span>
+          </div>
+        </div>
+
+        <div className="grid gap-4 sm:grid-cols-2">
+          <input
+            value={form.name}
+            onChange={(e) => setForm({ ...form, name: e.target.value })}
+            placeholder="Your name"
+            className="w-full rounded-xl bg-input/50 px-4 py-3 text-sm outline-none ring-1 ring-border focus:ring-primary/60"
+          />
+          <input
+            type="email"
+            value={form.email}
+            onChange={(e) => setForm({ ...form, email: e.target.value })}
+            placeholder="Email address"
+            className="w-full rounded-xl bg-input/50 px-4 py-3 text-sm outline-none ring-1 ring-border focus:ring-primary/60"
+          />
+          <select
+            value={form.pkg}
+            onChange={(e) => setForm({ ...form, pkg: e.target.value })}
+            className="w-full rounded-xl bg-input/50 px-4 py-3 text-sm outline-none ring-1 ring-border focus:ring-primary/60"
+          >
+            {HIRE_PACKAGES.map((p) => (
+              <option key={p.name} value={p.name} className="bg-background">
+                {p.name} — {p.price}
+              </option>
+            ))}
+          </select>
+          <input
+            value={form.budget}
+            onChange={(e) => setForm({ ...form, budget: e.target.value })}
+            placeholder="Estimated budget (optional)"
+            className="w-full rounded-xl bg-input/50 px-4 py-3 text-sm outline-none ring-1 ring-border focus:ring-primary/60"
+          />
+          <textarea
+            value={form.message}
+            onChange={(e) => setForm({ ...form, message: e.target.value })}
+            placeholder="Project details — goals, timeline, links..."
+            rows={5}
+            className="sm:col-span-2 w-full rounded-xl bg-input/50 px-4 py-3 text-sm outline-none ring-1 ring-border focus:ring-primary/60"
+          />
+        </div>
+        <div className="mt-6 flex flex-wrap items-center justify-between gap-3">
+          <p className="text-xs text-muted-foreground">Or email me directly at <a href={`mailto:${EMAIL}`} className="text-primary hover:underline">{EMAIL}</a></p>
+          <button
+            type="submit"
+            disabled={sent}
+            className="inline-flex items-center gap-2 rounded-full gradient-bg px-6 py-3 text-sm font-medium text-primary-foreground shadow-lg shadow-primary/30 transition-transform hover:scale-[1.03] disabled:opacity-60"
+          >
+            {sent ? "Sent ✓" : (<>Send request <Send className="h-4 w-4" /></>)}
+          </button>
+        </div>
+      </motion.form>
+    </Section>
+  );
+}
+
+/* ---------- AI Assistant Widget ---------- */
+type ChatMsg = { role: "user" | "assistant"; content: string };
+
+function AIAssistant() {
+  const [open, setOpen] = useState(false);
+  const [input, setInput] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [messages, setMessages] = useState<ChatMsg[]>([
+    { role: "assistant", content: `Hi! I'm ${NAME.split(" ")[0]}'s AI assistant. Ask me anything about services, pricing, or how to hire.` },
+  ]);
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
+  }, [messages, loading]);
+
+  const send = async (e?: React.FormEvent) => {
+    e?.preventDefault();
+    const text = input.trim();
+    if (!text || loading) return;
+    const next: ChatMsg[] = [...messages, { role: "user", content: text }];
+    setMessages(next);
+    setInput("");
+    setLoading(true);
+    try {
+      const res = await fetch("/api/assistant", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ messages: next }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Request failed");
+      setMessages((m) => [...m, { role: "assistant", content: data.reply }]);
+    } catch (err) {
+      setMessages((m) => [...m, { role: "assistant", content: `Sorry, something went wrong: ${(err as Error).message}` }]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const suggestions = ["What services do you offer?", "How much for a landing page?", "How can I hire you?"];
+
+  return (
+    <>
+      <motion.button
+        onClick={() => setOpen((v) => !v)}
+        initial={{ scale: 0, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ delay: 1.2, type: "spring", stiffness: 200 }}
+        whileHover={{ scale: 1.08 }}
+        whileTap={{ scale: 0.94 }}
+        aria-label="Open AI assistant"
+        className="fixed bottom-6 right-6 z-[80] grid h-14 w-14 place-items-center rounded-full gradient-bg text-primary-foreground shadow-[0_10px_40px_-8px_oklch(0.68_0.22_300/0.6)]"
+      >
+        {open ? <X className="h-5 w-5" /> : <MessageCircle className="h-5 w-5" />}
+        {!open && (
+          <span className="absolute -top-1 -right-1 h-3 w-3 rounded-full bg-emerald-400 ring-2 ring-background" />
+        )}
+      </motion.button>
+
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0, y: 20, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 20, scale: 0.95 }}
+            transition={{ duration: 0.22 }}
+            className="fixed bottom-24 right-4 z-[80] flex h-[70vh] max-h-[560px] w-[calc(100vw-2rem)] max-w-sm flex-col overflow-hidden rounded-3xl glass-strong shadow-2xl sm:right-6"
+          >
+            <div className="flex items-center gap-3 border-b border-border/60 px-4 py-3">
+              <div className="relative grid h-9 w-9 place-items-center rounded-full gradient-bg text-primary-foreground">
+                <Bot className="h-4 w-4" />
+                <span className="absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full bg-emerald-400 ring-2 ring-background" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <div className="text-sm font-semibold">Ask Gunjit's AI</div>
+                <div className="text-xs text-muted-foreground">Usually replies instantly</div>
+              </div>
+              <button
+                onClick={() => setOpen(false)}
+                aria-label="Close"
+                className="grid h-8 w-8 place-items-center rounded-full hover:bg-primary/10"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+
+            <div ref={scrollRef} className="flex-1 space-y-3 overflow-y-auto px-4 py-4">
+              {messages.map((m, i) => (
+                <div
+                  key={i}
+                  className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}
+                >
+                  <div
+                    className={`max-w-[85%] whitespace-pre-wrap rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed ${
+                      m.role === "user"
+                        ? "gradient-bg text-primary-foreground"
+                        : "bg-secondary/60 text-foreground"
+                    }`}
+                  >
+                    {m.content}
+                  </div>
+                </div>
+              ))}
+              {loading && (
+                <div className="flex justify-start">
+                  <div className="flex items-center gap-1.5 rounded-2xl bg-secondary/60 px-3.5 py-3">
+                    <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-primary [animation-delay:-0.3s]" />
+                    <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-primary [animation-delay:-0.15s]" />
+                    <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-primary" />
+                  </div>
+                </div>
+              )}
+              {messages.length <= 1 && !loading && (
+                <div className="flex flex-wrap gap-2 pt-2">
+                  {suggestions.map((s) => (
+                    <button
+                      key={s}
+                      onClick={() => { setInput(s); setTimeout(() => send(), 0); }}
+                      className="rounded-full glass px-3 py-1.5 text-xs hover:text-primary"
+                    >
+                      {s}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <form onSubmit={send} className="flex items-center gap-2 border-t border-border/60 p-3">
+              <input
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                placeholder="Ask a question..."
+                className="flex-1 rounded-full bg-input/60 px-4 py-2.5 text-sm outline-none ring-1 ring-transparent focus:ring-primary/60"
+              />
+              <button
+                type="submit"
+                disabled={loading || !input.trim()}
+                aria-label="Send"
+                className="grid h-10 w-10 shrink-0 place-items-center rounded-full gradient-bg text-primary-foreground shadow-lg shadow-primary/30 disabled:opacity-50"
+              >
+                <Send className="h-4 w-4" />
+              </button>
+            </form>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 }
 
@@ -1183,12 +1495,14 @@ export default function Portfolio() {
         <Experience />
         <Education />
         <Services />
+        <HireMe />
         <Testimonials />
         <Blog />
         <Contact />
       </main>
       <Footer />
       <BackToTop />
+      <AIAssistant />
     </div>
   );
 }
